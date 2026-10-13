@@ -1,0 +1,188 @@
+/**
+ * base.css - Variables, resets, typography, and utility classes
+ */
+
+:root {
+  /* Colors - Base Dark Audiophile */
+  --bg-base: #080a0f;
+  --bg-surface: #10141d;
+  --bg-surface-elevated: #171d2a;
+  --bg-surface-hover: #1f2738;
+  --bg-surface-active: #283348;
+  
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.16);
+  --border-accent: rgba(59, 130, 246, 0.35);
+
+  /* Brand Accents - Modern Electric Blue */
+  --accent: #3b82f6;
+  --accent-light: #60a5fa;
+  --accent-dark: #1d4ed8;
+  --accent-glow: rgba(59, 130, 246, 0.28);
+
+  /* Tier Colors - Fixed Industry Standard */
+  --tier-hires: #fbbf24;
+  --tier-studio: #f59e0b;
+  --tier-cd: #14b8a6;
+  --tier-lossless: #14b8a6;
+  --tier-dsd: #c084fc;
+  --tier-lossy-hq: #94a3b8;
+  --tier-lossy: #64748b;
+
+  /* Status Colors */
+  --status-verified: #10b981;
+  --status-suspect: #fbbf24;
+  --status-danger: #f87171;
+  --status-info: #3b82f6;
+
+  /* Typography & Colors */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #7e8e9f;
+  --text-inverse: #080a0f;
+
+  --font-heading: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Geist', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', "SF Mono", Consolas, "Courier New", monospace;
+
+  /* Spacing & Sizes */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --nav-height: 64px;
+  --player-bar-height: 88px;
+  --header-height: 60px;
+
+  /* Elevation */
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 20px -4px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 16px 36px -8px rgba(0, 0, 0, 0.85);
+
+  --transition-speed: 0.18s;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* Typography styles */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main);
+  font-family: var(--font-heading, var(--font-sans));
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+p {
+  color: var(--text-muted);
+}
+
+/* Utility Helpers */
+.mono {
+  font-family: var(--font-mono);
+}
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gap-xs { gap: 4px; }
+.gap-sm { gap: 8px; }
+.gap-md { gap: 14px; }
+.gap-lg { gap: 20px; }
+
+/* Accessibility & Keyboard Focus Management */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-light) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.35) !important;
+}
+
+/* Skip link for screen reader and keyboard navigation */
+.skip-link {
+  position: fixed;
+  top: -80px;
+  left: 16px;
+  background: var(--accent);
+  color: #080a0f;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  z-index: 99999;
+  box-shadow: var(--shadow-lg);
+  transition: top 0.2s var(--ease);
+  text-decoration: none;
+}
+
+.skip-link:focus-visible {
+  top: 16px;
+}
+

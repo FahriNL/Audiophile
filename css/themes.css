@@ -1,0 +1,283 @@
+/**
+ * themes.css - Easy theme switching powered by CSS variables
+ */
+
+/* OLED Pure Black Theme */
+[data-theme="oled"] {
+  --bg-base: #000000;
+  --bg-surface: #0a0a0a;
+  --bg-surface-elevated: #121212;
+  --bg-surface-hover: #1c1c1c;
+  --bg-surface-active: #242424;
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-medium: rgba(255, 255, 255, 0.22);
+}
+
+/* Aurora Light Theme - Luminous Porcelain Glass & Daylight Spectrum */
+[data-theme="light"] {
+  /* Surfaces - Soft Crisp Porcelain Canvas */
+  --bg-base: #f4f6fa;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-hover: #edf2f7;
+  --bg-surface-active: #e2e8f0;
+
+  /* Glass Surfaces - Frosted Daylight Glaze */
+  --glass-bg: rgba(255, 255, 255, 0.78);
+  --glass-bg-elevated: rgba(255, 255, 255, 0.92);
+  --glass-bg-hover: rgba(238, 242, 250, 0.85);
+  --glass-bg-active: rgba(226, 232, 244, 0.92);
+  --glass-bg-sheet: rgba(255, 255, 255, 0.94);
+  --glass-bg-card: rgba(255, 255, 255, 0.72);
+
+  /* Specular Highlight & Borders */
+  --glass-border-specular: rgba(255, 255, 255, 0.95);
+  --glass-border-subtle: rgba(15, 23, 42, 0.08);
+  --glass-border-card: rgba(15, 23, 42, 0.06);
+  --glass-border-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(15, 23, 42, 0.04) 100%);
+
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --border-medium: rgba(15, 23, 42, 0.14);
+  --border-accent: rgba(37, 99, 235, 0.35);
+
+  /* Brand Accents - Royal Sapphire & Vivid Daylight Glow */
+  --aurora-primary: #2563eb;
+  --aurora-light: #3b82f6;
+  --aurora-dark: #1d4ed8;
+  --aurora-glow: rgba(37, 99, 235, 0.16);
+  --aurora-teal: #0284c7;
+  --aurora-violet: #6366f1;
+  --aurora-rose: #e11d48;
+
+  --accent: #2563eb;
+  --accent-light: #3b82f6;
+  --accent-dark: #1d4ed8;
+  --accent-glow: rgba(37, 99, 235, 0.18);
+  --accent-2: #0284c7;
+
+  /* High Legibility WCAG AA Ink Contrast */
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+  --text-faint: rgba(15, 23, 42, 0.28);
+  --text-inverse: #ffffff;
+
+  /* Seek & Slider Elements */
+  --seek-track: rgba(15, 23, 42, 0.12);
+  --seek-track-hover: rgba(15, 23, 42, 0.2);
+  --seek-thumb: #2563eb;
+
+  /* Non-Backdrop Fallbacks */
+  --glass-fallback-surface: #ffffff;
+  --glass-fallback-elevated: #f8fafc;
+  --glass-fallback-sheet: #f1f5f9;
+
+  /* Refined Daylight Ambient Depth Shadows */
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 16px 40px -8px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+  --shadow-dock: 4px 0 24px -4px rgba(15, 23, 42, 0.07);
+  --shadow-drawer: -6px 0 32px -4px rgba(15, 23, 42, 0.1);
+  --shadow-floating: 0 16px 40px -8px rgba(15, 23, 42, 0.14), 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+/* Aurora Light Component Adaptations */
+[data-theme="light"] .dialog-overlay {
+  background: rgba(15, 23, 42, 0.35);
+}
+
+[data-theme="light"] .dialog-box {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 20px 48px -8px rgba(15, 23, 42, 0.18);
+}
+
+[data-theme="light"] .context-menu {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="light"] .top-search-dropdown {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(15, 23, 42, 0.12);
+  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.14);
+}
+
+[data-theme="light"] .top-search-dropdown-header {
+  border-bottom-color: rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .top-search-item:hover {
+  background: rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="light"] .top-search-clear-btn:hover {
+  background: rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .full-player {
+  background: radial-gradient(circle at 40% 30%, rgba(255, 255, 255, 0.96) 0%, rgba(244, 246, 250, 0.98) 100%);
+  border-left-color: rgba(15, 23, 42, 0.08);
+  border-bottom-color: rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .nerd-stats-card,
+[data-theme="light"] .metadata-editor-card,
+[data-theme="light"] .ab-compare-modal,
+[data-theme="light"] .sleep-timer-card {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 24px 60px -8px rgba(15, 23, 42, 0.16);
+}
+
+[data-theme="light"] .nerd-stats-header,
+[data-theme="light"] .metadata-editor-header,
+[data-theme="light"] .sleep-timer-header,
+[data-theme="light"] .ab-compare-header {
+  background: rgba(15, 23, 42, 0.02);
+  border-bottom-color: rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .search-hero-input-box {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="light"] .search-hero-input-box:focus-within {
+  background: #ffffff;
+  border-color: var(--accent);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.12);
+}
+
+[data-theme="light"] .settings-input,
+[data-theme="light"] .settings-select {
+  background-color: #ffffff;
+  border-color: rgba(15, 23, 42, 0.14);
+  color: var(--text-main);
+}
+
+[data-theme="light"] .selection-bar {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.15), 0 0 20px var(--accent-glow);
+}
+
+[data-theme="light"] .badge-hires {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(217, 119, 6, 0.45);
+  color: #b45309;
+  box-shadow: none;
+}
+
+[data-theme="light"] .badge-studio {
+  background: rgba(217, 119, 6, 0.12);
+  border-color: rgba(180, 83, 9, 0.45);
+  color: #9a3412;
+  box-shadow: none;
+}
+
+[data-theme="light"] .badge-lossless,
+[data-theme="light"] .badge-cd {
+  background: rgba(13, 148, 136, 0.12);
+  border-color: rgba(13, 148, 136, 0.4);
+  color: #0f766e;
+}
+
+[data-theme="light"] .badge-dsd {
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(147, 51, 234, 0.4);
+  color: #7e22ce;
+}
+
+[data-theme="light"] .badge-lossy-hq {
+  background: rgba(100, 116, 139, 0.1);
+  border-color: rgba(100, 116, 139, 0.3);
+  color: #334155;
+}
+
+[data-theme="light"] .badge-lossy {
+  background: rgba(100, 116, 139, 0.08);
+  border-color: rgba(100, 116, 139, 0.22);
+  color: #475569;
+}
+
+[data-theme="light"] .badge-verified {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #047857;
+}
+
+[data-theme="light"] .badge-suspect {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #b45309;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.16);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.28);
+}
+
+[data-theme="light"] .waveform-hover-tooltip {
+  background: #ffffff;
+  color: var(--text-main);
+  border-color: rgba(15, 23, 42, 0.14);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+}
+
+[data-theme="light"] .chip {
+  background: rgba(15, 23, 42, 0.05);
+  border-color: rgba(15, 23, 42, 0.1);
+  color: var(--text-muted);
+}
+
+[data-theme="light"] .chip:hover {
+  background: rgba(15, 23, 42, 0.08);
+  color: var(--text-main);
+}
+
+[data-theme="light"] .chip.active {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+[data-theme="light"] .track-row:hover {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .track-row.playing {
+  background: rgba(37, 99, 235, 0.08);
+}
+
+[data-theme="light"] .collection-submenu-flyout {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.05);
+}
+
+/* High Contrast Theme */
+[data-theme="contrast"] {
+  --bg-base: #000000;
+  --bg-surface: #000000;
+  --bg-surface-elevated: #111111;
+  --bg-surface-hover: #222222;
+  --bg-surface-active: #333333;
+
+  --border-subtle: #ffffff;
+  --border-medium: #ffffff;
+  --border-accent: #38bdf8;
+
+  --accent: #38bdf8;
+  --accent-light: #7dd3fc;
+  --accent-dark: #0284c7;
+
+  --text-main: #ffffff;
+  --text-muted: #dddddd;
+  --text-dim: #aaaaaa;
+}
