@@ -192,12 +192,12 @@ class CollectionView {
           <div class="collection-sub-nav fk-seg" id="collectionSubNav">
             <div class="fk-pill"></div>
             <button class="collection-tab-btn ${this.currentSubTab === 'all' ? 'on active' : ''}" data-tab="all">${escapeHtml(t('collection.subtabs.all'))}</button>
-            <button class="collection-tab-btn ${this.currentSubTab === 'albums' ? 'on active' : ''}" data-tab="albums">${escapeHtml(t('collection.subtabs.albums'))} (${albums.length})</button>
-            <button class="collection-tab-btn ${this.currentSubTab === 'artists' ? 'on active' : ''}" data-tab="artists">${escapeHtml(t('collection.subtabs.artists'))} (${artists.length})</button>
-            <button class="collection-tab-btn ${this.currentSubTab === 'playlists' ? 'on active' : ''}" data-tab="playlists">${escapeHtml(t('collection.subtabs.playlists'))} (${playlists.length})</button>
+            <button class="collection-tab-btn ${this.currentSubTab === 'albums' ? 'on active' : ''}" data-tab="albums">${escapeHtml(t('collection.subtabs.albums'))}</button>
+            <button class="collection-tab-btn ${this.currentSubTab === 'artists' ? 'on active' : ''}" data-tab="artists">${escapeHtml(t('collection.subtabs.artists'))}</button>
+            <button class="collection-tab-btn ${this.currentSubTab === 'playlists' ? 'on active' : ''}" data-tab="playlists">${escapeHtml(t('collection.subtabs.playlists'))}</button>
             <button class="collection-tab-btn ${this.currentSubTab === 'tracks' ? 'on active' : ''}" data-tab="tracks">${escapeHtml(t('collection.subtabs.tracks'))}</button>
             ${duplicateGroups.size > 0 ? `
-              <button class="collection-tab-btn ${this.currentSubTab === 'duplicates' ? 'on active' : ''}" data-tab="duplicates">${escapeHtml(t('collection.subtabs.duplicates'))} (${duplicateGroups.size})</button>
+              <button class="collection-tab-btn ${this.currentSubTab === 'duplicates' ? 'on active' : ''}" data-tab="duplicates">${escapeHtml(t('collection.subtabs.duplicates'))}</button>
             ` : ''}
           </div>
         </div>
@@ -381,6 +381,7 @@ class CollectionView {
       const activeIdx = btns.findIndex(b => b.getAttribute('data-tab') === this.currentSubTab);
       liquid(subNav, {
         index: activeIdx >= 0 ? activeIdx : 0,
+        drag: false,
         onChange: (idx, btn) => {
           const tab = btn.getAttribute('data-tab');
           if (tab && tab !== this.currentSubTab) {

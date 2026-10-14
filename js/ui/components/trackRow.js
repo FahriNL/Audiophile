@@ -97,16 +97,20 @@ export class TrackRowRenderer {
       : `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 16.5C9.51 16.5 7.5 14.49 7.5 12C7.5 9.51 9.51 7.5 12 7.5C14.49 7.5 16.5 9.51 16.5 12C16.5 14.49 14.49 16.5 12 16.5ZM12 11C11.45 11 11 11.45 11 12C11 12.55 11.45 13 12 13C12.55 13 13 12.55 13 12C13 11.45 12.55 11 12 11Z"/></svg>`;
 
     row.innerHTML = `
-      ${showIndex ? `<div class="mono" style="font-size:0.75rem; color:var(--text-dim); width:20px; text-align:center;">${index + 1}</div>` : ''}
+      ${showIndex ? `<div class="mono track-index" style="font-size:0.75rem; color:var(--text-dim); width:20px; text-align:center;">${index + 1}</div>` : ''}
       <div class="track-cover-thumb">${thumbHtml}</div>
       <div class="track-info">
         <div class="track-title truncate">${escapeHtml(title)}</div>
         <div class="track-artist truncate">
           ${renderArtistLinks(artist)}
           ${album ? `<span class="meta-dot">&bull;</span><span class="clickable-album" data-album="${escapeHtml(album)}">${escapeHtml(album)}</span>` : ''}
+          <span class="track-inline-badges">
+            <span class="badge ${tierInfo.badgeClass}" title="${escapeHtml(tierInfo.details || tierInfo.label)}">${escapeHtml(tierInfo.shortTag || tierInfo.label)}</span>
+            ${authBadgeHtml}
+          </span>
         </div>
       </div>
-      <div class="track-meta">
+      <div class="track-meta track-meta-desktop">
         ${compareBtnHtml}
         ${missingBadgeHtml}
         <span class="badge ${tierInfo.badgeClass}" title="${escapeHtml(tierInfo.details || tierInfo.label)}" aria-label="${escapeHtml(tierInfo.label)}">${escapeHtml(tierInfo.shortTag || tierInfo.label)}</span>

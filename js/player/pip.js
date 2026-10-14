@@ -30,6 +30,9 @@ class PipManager {
     this.isVideoPipActive = false;
     this.autoOpenedByVisibility = false;
     this.activeLyricText = '';
+    this.cachedCoverImage = null;
+    this.cachedCoverUrl = '';
+    this.lastCanvasSec = -1;
   }
 
   init() {
@@ -46,10 +49,22 @@ class PipManager {
 
     store.subscribe('isPlaying', (playing) => {
       if (this.isDocumentPipActive) this.updateDocumentPipPlayState(playing);
+      else if (this.isVideoPipActive) this.updateVideoPipCanvas();
     });
 
     store.subscribe('currentTime', (time) => {
       if (this.isDocumentPipActive) this.updateDocumentPipProgress(time);
+      else if (this.isVideoPipActive) {
+        const sec = Math.floor(time || 0);
+        if (sec !== this.lastCanvasSec) {
+          this.lastCanvasSec = sec;
+          this.updateVideoPipCanvas();
+        }
+      }
+    });
+
+    events.on('lyrics:activeLine', (line) => {
+      this.setLyricLine(typeof line === 'string' ? line : (line?.text || ''));
     });
   }
 
@@ -466,6 +481,9 @@ class PipManager {
       const lyricEl = this.pipWindow.document.getElementById('pipLyric');
       if (lyricEl) lyricEl.innerText = this.activeLyricText || 'Audiophile';
     }
+    if (this.isVideoPipActive) {
+      this.updateVideoPipCanvas();
+    }
   }
 
   /**
@@ -514,35 +532,271 @@ class PipManager {
     if (!this.fallbackCanvas) return;
     const ctx = this.fallbackCanvas.getContext('2d');
     const { width, height } = this.fallbackCanvas;
+    if (!track) track = store.get('currentTrack');
+    if (!track) return;
 
-    // Dark gradient background
+    // 1. Background gradient
     const grad = ctx.createLinearGradient(0, 0, width, height);
     grad.addColorStop(0, '#090d16');
-    grad.addColorStop(1, '#1e293b');
+    grad.addColorStop(0.5, '#0f172a');
+    grad.addColorStop(1, '#090d16');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, width, height);
 
-    // Title & Artist
+    // 2. Cover Artwork
+    const coverUrl = track.overrides?.pictureUrl || track.metadata?.pictureUrl || '';
+    const coverSize = 180;
+    const coverX = Math.round((width - coverSize) / 2);
+    const coverY = 24;
+
+    if (coverUrl && coverUrl !== this.cachedCoverUrl) {
+      this.cachedCoverUrl = coverUrl;
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        this.cachedCoverImage = img;
+        if (this.isVideoPipActive) this.drawCanvasCover(track);
+      };
+      img.onerror = () => {
+        this.cachedCoverImage = null;
+      };
+      img.src = coverUrl;
+    } else if (!coverUrl) {
+      this.cachedCoverUrl = '';
+      this.cachedCoverImage = null;
+    }
+
+    // Draw cover with rounded corners (16px)
+    ctx.save();
+    const cornerRadius = 16;
+    ctx.beginPath();
+    ctx.moveTo(coverX + cornerRadius, coverY);
+    ctx.arcTo(coverX + coverSize, coverY, coverX + coverSize, coverY + coverSize, cornerRadius);
+    ctx.arcTo(coverX + coverSize, coverY + coverSize, coverX, coverY + coverSize, cornerRadius);
+    ctx.arcTo(coverX, coverY + coverSize, coverX, coverY, cornerRadius);
+    ctx.arcTo(coverX, coverY, coverX + coverSize, coverY, cornerRadius);
+    ctx.closePath();
+    ctx.clip();
+
+    if (this.cachedCoverImage) {
+      ctx.drawImage(this.cachedCoverImage, coverX, coverY, coverSize, coverSize);
+    } else {
+      // Sleek vinyl record fallback
+      const vinylGrad = ctx.createRadialGradient(256, coverY + 90, 10, 256, coverY + 90, 90);
+      vinylGrad.addColorStop(0, '#0284c7');
+      vinylGrad.addColorStop(0.25, '#1e293b');
+      vinylGrad.addColorStop(0.85, '#0f172a');
+      vinylGrad.addColorStop(1, '#020617');
+      ctx.fillStyle = vinylGrad;
+      ctx.fillRect(coverX, coverY, coverSize, coverSize);
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 2;
+      for (let r = 24; r < 80; r += 14) {
+        ctx.beginPath();
+        ctx.arc(256, coverY + 90, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(256, coverY + 90, 8, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // Subtle border on cover
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(coverX + cornerRadius, coverY);
+    ctx.arcTo(coverX + coverSize, coverY, coverX + coverSize, coverY + coverSize, cornerRadius);
+    ctx.arcTo(coverX + coverSize, coverY + coverSize, coverX, coverY + coverSize, cornerRadius);
+    ctx.arcTo(coverX, coverY + coverSize, coverX, coverY, cornerRadius);
+    ctx.arcTo(coverX, coverY, coverX + coverSize, coverY, cornerRadius);
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.restore();
+
+    // 3. Track Title
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 32px sans-serif';
+    ctx.font = 'bold 22px system-ui, -apple-system, sans-serif';
     ctx.textAlign = 'center';
-    const title = track.overrides?.title || track.metadata?.title || track.name;
-    ctx.fillText(title.substring(0, 24), width / 2, height / 2 - 20);
+    const rawTitle = track.overrides?.title || track.metadata?.title || track.name;
+    const title = rawTitle.length > 28 ? rawTitle.substring(0, 27) + '...' : rawTitle;
+    ctx.fillText(title, width / 2, 238);
 
+    // 4. Artist & Album
     ctx.fillStyle = '#94a3b8';
-    ctx.font = '24px sans-serif';
-    const artist = track.overrides?.artist || track.metadata?.artist || 'Unknown Artist';
-    ctx.fillText(artist.substring(0, 30), width / 2, height / 2 + 24);
+    ctx.font = '15px system-ui, -apple-system, sans-serif';
+    const rawArtist = track.overrides?.artist || track.metadata?.artist || 'Unknown Artist';
+    const rawAlbum = track.overrides?.album || track.metadata?.album || '';
+    const artistLine = rawAlbum ? `${rawArtist} - ${rawAlbum}` : rawArtist;
+    const truncatedArtist = artistLine.length > 38 ? artistLine.substring(0, 36) + '...' : artistLine;
+    ctx.fillText(truncatedArtist, width / 2, 264);
 
-    // Tier badge
-    ctx.fillStyle = '#3b82f6';
-    ctx.font = 'bold 20px monospace';
-    ctx.fillText(track.tier || 'AUDIO', width / 2, height / 2 + 70);
+    // 5. Tier / Quality Badge (Sleek Pill)
+    const tier = track.tier || 'BIT-PERFECT';
+    ctx.font = 'bold 11px monospace';
+    const badgeTextWidth = ctx.measureText(tier).width;
+    const badgeW = badgeTextWidth + 18;
+    const badgeH = 20;
+    const badgeX = Math.round((width - badgeW) / 2);
+    const badgeY = 282;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(37, 99, 235, 0.18)';
+    ctx.strokeStyle = '#3b82f6';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    if (typeof ctx.roundRect === 'function') {
+      ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 10);
+    } else {
+      ctx.rect(badgeX, badgeY, badgeW, badgeH);
+    }
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#93c5fd';
+    ctx.fillText(tier, width / 2, badgeY + 14);
+    ctx.restore();
+
+    // 6. Synchronized Lyrics Card
+    const lyricBoxX = 26;
+    const lyricBoxY = 318;
+    const lyricBoxW = 460;
+    const lyricBoxH = 46;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    if (typeof ctx.roundRect === 'function') {
+      ctx.roundRect(lyricBoxX, lyricBoxY, lyricBoxW, lyricBoxH, 12);
+    } else {
+      ctx.rect(lyricBoxX, lyricBoxY, lyricBoxW, lyricBoxH);
+    }
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#38bdf8';
+    ctx.font = 'italic 16px system-ui, -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    const lyricRaw = this.activeLyricText || 'Audiophile - Bit-Perfect Audio';
+    const lyricText = lyricRaw.length > 46 ? lyricRaw.substring(0, 44) + '...' : lyricRaw;
+    ctx.fillText(lyricText, width / 2, lyricBoxY + 28);
+    ctx.restore();
+
+    // 7. Player Progress Bar & Timestamps
+    const curTime = store.get('currentTime') || 0;
+    const duration = track.streamInfo?.duration || 1;
+    const progressPct = Math.max(0, Math.min(1, curTime / duration));
+
+    const barX = 26;
+    const barY = 388;
+    const barW = 460;
+    const barH = 6;
+
+    // Track background
+    ctx.save();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.beginPath();
+    if (typeof ctx.roundRect === 'function') {
+      ctx.roundRect(barX, barY, barW, barH, 3);
+    } else {
+      ctx.rect(barX, barY, barW, barH);
+    }
+    ctx.fill();
+
+    // Track active filled
+    const activeW = Math.max(6, barW * progressPct);
+    const barGrad = ctx.createLinearGradient(barX, barY, barX + activeW, barY);
+    barGrad.addColorStop(0, '#2563eb');
+    barGrad.addColorStop(1, '#38bdf8');
+    ctx.fillStyle = barGrad;
+    ctx.beginPath();
+    if (typeof ctx.roundRect === 'function') {
+      ctx.roundRect(barX, barY, activeW, barH, 3);
+    } else {
+      ctx.rect(barX, barY, activeW, barH);
+    }
+    ctx.fill();
+
+    // Thumb handle
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowColor = 'rgba(59, 130, 246, 0.6)';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.arc(barX + activeW, barY + 3, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Timestamps
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '13px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText(formatDuration(curTime), barX, barY + 24);
+    ctx.textAlign = 'right';
+    ctx.fillText(formatDuration(duration), barX + barW, barY + 24);
+
+    // 8. Player Transport Control Buttons Representation
+    const isPlaying = store.get('isPlaying');
+    const ctrlY = 452;
+
+    // Previous Button (|<<)
+    ctx.fillStyle = '#cbd5e1';
+    ctx.beginPath();
+    ctx.moveTo(196, ctrlY - 9);
+    ctx.lineTo(196, ctrlY + 9);
+    ctx.lineTo(182, ctrlY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillRect(178, ctrlY - 9, 3, 18);
+
+    // Play / Pause Central Circle
+    const playCircleX = 256;
+    const playCircleY = ctrlY;
+    const playCircleR = 26;
+
+    ctx.save();
+    ctx.fillStyle = '#2563eb';
+    ctx.shadowColor = 'rgba(37, 99, 235, 0.5)';
+    ctx.shadowBlur = 14;
+    ctx.beginPath();
+    ctx.arc(playCircleX, playCircleY, playCircleR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.fillStyle = '#ffffff';
+    if (isPlaying) {
+      // Pause icon (two vertical bars)
+      ctx.fillRect(playCircleX - 8, playCircleY - 9, 5, 18);
+      ctx.fillRect(playCircleX + 3, playCircleY - 9, 5, 18);
+    } else {
+      // Play icon (triangle)
+      ctx.beginPath();
+      ctx.moveTo(playCircleX - 5, playCircleY - 10);
+      ctx.lineTo(playCircleX + 9, playCircleY);
+      ctx.lineTo(playCircleX - 5, playCircleY + 10);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Next Button (>>|)
+    ctx.fillStyle = '#cbd5e1';
+    ctx.beginPath();
+    ctx.moveTo(316, ctrlY - 9);
+    ctx.lineTo(316, ctrlY + 9);
+    ctx.lineTo(330, ctrlY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillRect(331, ctrlY - 9, 3, 18);
   }
 
   updateVideoPipCanvas(track) {
     if (!this.isVideoPipActive) return;
-    this.drawCanvasCover(track);
+    this.drawCanvasCover(track || store.get('currentTrack'));
   }
 
   handleVisibilityChange() {

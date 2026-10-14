@@ -4,7 +4,7 @@
 
 export const APP_VERSION_INFO = {
   name: 'Audiophile',
-  version: '0.9.0',
-  buildDate: '2026-10-05',
+  version: '1.0.1',
+  buildDate: '2026-10-14',
   repoUrl: 'https://github.com/audiophile-player/audiophile'
 };

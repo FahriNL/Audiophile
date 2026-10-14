@@ -1,0 +1,25 @@
+{
+  "name": "hifilocal",
+  "version": "1.0.1",
+  "description": "Pemutar musik lokal audiophile modular dengan verifikasi keaslian Hi-Res dan signal path jujur",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "test": "node tests/run-cli.js && node tests/static-audit.js && node tests/check-imports.js",
+    "archive": "node scripts/archive.js",
+    "build:deploy": "node scripts/build_deploy_zip.js"
+  },
+  "keywords": [
+    "audiophile",
+    "music-player",
+    "flac",
+    "hi-res",
+    "spectrogram",
+    "vanilla-js",
+    "pwa"
+  ],
+  "author": "HiFiLocal",
+  "license": "MIT"
+}

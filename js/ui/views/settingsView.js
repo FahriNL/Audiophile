@@ -322,7 +322,7 @@ class SettingsView {
                   Audiophile membaca berkas audio beresolusi tinggi langsung dari penyimpanan komputer Anda secara aman tanpa diunggah ke server eksternal.
                 </p>
               </div>
-              <div style="margin-left:auto;">
+              <div class="settings-section-actions" style="margin-left:auto;">
                 <button class="btn btn-secondary btn-sm btn-reset-sec" data-sec="library" title="Kembalikan bagian ini ke default">Reset Bagian Ini</button>
               </div>
             </div>
@@ -461,7 +461,7 @@ class SettingsView {
                   Konfigurasi pipeline audio antara pemutaran murni tanpa manipulasi DSP (Mode Pure), pemrosesan DSP aktif dengan equalizer 10-band, serta peleburan transisi crossfade equal-power.
                 </p>
               </div>
-              <div style="margin-left:auto;">
+              <div class="settings-section-actions" style="margin-left:auto;">
                 <button class="btn btn-secondary btn-sm btn-reset-sec" data-sec="pureMode" title="Kembalikan bagian ini ke default">Reset Bagian Ini</button>
               </div>
             </div>
@@ -969,7 +969,7 @@ class SettingsView {
                   Sesuaikan pintasan tombol navigasi sesuai kebiasaan Anda dan aktifkan pemutar mini mengambang (Picture-in-Picture) untuk mendengarkan saat bekerja di aplikasi lain.
                 </p>
               </div>
-              <div style="margin-left:auto;">
+              <div class="settings-section-actions" style="margin-left:auto;">
                 <button class="btn btn-secondary btn-sm" id="btnResetAllShortcuts" title="Kembalikan semua pintasan ke bawaan">Reset Pintasan</button>
               </div>
             </div>
@@ -1082,7 +1082,7 @@ class SettingsView {
                   Deteksi keaslian fisik berkas audio menggunakan Fast Fourier Transform (FFT) di Web Worker independen.
                 </p>
               </div>
-              <div style="margin-left:auto;">
+              <div class="settings-section-actions" style="margin-left:auto;">
                 <button class="btn btn-secondary btn-sm btn-reset-sec" data-sec="autoAnalyzeOnImport" title="Kembalikan bagian ini ke default">Reset Bagian Ini</button>
               </div>
             </div>
@@ -1154,7 +1154,7 @@ class SettingsView {
                   Audiophile dirancang dengan filosofi lokal murni. Kami memberikan kendali penuh terhadap setiap layanan internet eksternal yang dihubungi oleh aplikasi.
                 </p>
               </div>
-              <div style="margin-left:auto;">
+              <div class="settings-section-actions" style="margin-left:auto;">
                 <button class="btn btn-secondary btn-sm btn-reset-sec" data-sec="privacy" title="Kembalikan bagian ini ke default">Reset Bagian Ini</button>
               </div>
             </div>
@@ -1227,7 +1227,7 @@ class SettingsView {
                   Kelola cadangan data pengguna lengkap, verifikasi kapabilitas API peramban, serta preferensi tema dan bahasa antarmuka.
                 </p>
               </div>
-              <div style="margin-left:auto;">
+              <div class="settings-section-actions" style="margin-left:auto;">
                 <button class="btn btn-secondary btn-sm btn-reset-sec" data-sec="theme" title="Kembalikan bagian ini ke default">Reset Bagian Ini</button>
               </div>
             </div>
@@ -1363,7 +1363,7 @@ class SettingsView {
                   Pasang mod tampilan (CSS), fungsional (JS), atau pengurangan elemen UI hanya dengan mengimpor berkas .zip. Seluruh mod diekstrak dan dieksekusi secara lokal dan aman di peramban Anda.
                 </p>
               </div>
-              <div style="margin-left:auto; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <div class="settings-section-actions" style="margin-left:auto; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <button class="btn btn-primary btn-sm" id="btnSettingsInstallSampleMod" title="Pasang contoh mod Cyberpunk Neon & Quick Boost bawaan">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                   <span>Pasang Contoh Mod</span>
@@ -1426,9 +1426,14 @@ class SettingsView {
       const activeIdx = tabBtns.findIndex(b => b.getAttribute('data-cat') === this.activeCategory);
       liquid(navTabs, {
         index: activeIdx >= 0 ? activeIdx : 0,
+        drag: false,
         onChange: (idx, btn) => {
           const cat = btn.getAttribute('data-cat');
           this.activeCategory = cat;
+
+          try {
+            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          } catch {}
 
           this.container.querySelectorAll('.settings-section').forEach(sec => {
             if (cat === 'all') {

@@ -381,8 +381,15 @@ input[type="checkbox"] {
   font-size: 0.75rem;
   color: var(--text-muted);
 }
-
-.track-meta {
+.track-inline-badges {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.track-meta,
+.track-meta-desktop {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -2362,53 +2369,160 @@ input[type="range"]::-moz-range-thumb {
 }
 
 @media (max-width: 767px) {
+  #viewNowPlaying {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+  .np-header-bar {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 4px 12px 4px;
+  }
   .np-layout-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 18px;
     padding-bottom: 24px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
   .np-left-col {
     align-items: center;
     text-align: center;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 0 4px;
   }
   .np-cover-wrapper {
-    max-width: min(78vw, 320px);
+    max-width: min(76vw, 320px);
     margin: 0 auto;
+    box-sizing: border-box;
+  }
+  .np-track-details {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 0 2px;
   }
   .np-badges-row {
     justify-content: center;
+    max-width: 100%;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .np-badges-row .badge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    max-width: 100%;
+    white-space: nowrap;
   }
   .np-title-row {
     justify-content: space-between;
     text-align: left;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    gap: 8px;
+  }
+  .np-title-col {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .np-fav-btn {
+    flex-shrink: 0;
+  }
+  .np-playback-section {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 0 2px;
+  }
+  .np-seek-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .np-seek-wrapper input[type="range"] {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+  }
+  .np-time-row {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 2px;
   }
   .np-controls-row {
     max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
   }
   .np-secondary-actions-row {
     max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
   }
   .np-right-col {
     min-height: 380px;
     max-height: none;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
+  /* Track Row Mobile Title Room */
+  .track-meta-desktop {
+    display: none !important;
+  }
+  .track-inline-badges {
+    display: inline-flex !important;
+  }
+  .track-inline-badges .badge {
+    font-size: 0.62rem !important;
+    padding: 1px 5px !important;
+    line-height: 1.2 !important;
+  }
+  .track-title {
+    max-width: 100% !important;
+    font-size: 0.88rem !important;
+  }
+
+  /* Collection Subtabs Clean Segmented Fit */
   .collection-sub-nav {
     width: 100% !important;
     max-width: 100% !important;
-    overflow-x: auto !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 3px !important;
+    padding: 3px !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
     flex-wrap: nowrap !important;
-    white-space: nowrap !important;
-    scrollbar-width: none !important;
-    -webkit-overflow-scrolling: touch !important;
-    padding: 4px !important;
-    gap: 4px !important;
   }
   .collection-tab-btn {
-    padding: 6px 14px !important;
-    font-size: 0.8rem !important;
-    flex-shrink: 0 !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    padding: 7px 2px !important;
+    font-size: 0.74rem !important;
+    font-weight: 600 !important;
+    text-align: center !important;
     white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
   .collection-artists-grid {
     display: grid !important;
@@ -2416,6 +2530,49 @@ input[type="range"]::-moz-range-thumb {
     justify-items: center !important;
     gap: 16px !important;
     padding: 16px 2px 32px 2px !important;
+  }
+
+  /* Settings Section Headers & Responsive Action Buttons */
+  .settings-section-head {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  .settings-section-head > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .settings-section-meta {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
+  }
+  .settings-section-title {
+    font-size: 1.15rem !important;
+    line-height: 1.35 !important;
+  }
+  .settings-section-desc {
+    font-size: 0.82rem !important;
+    line-height: 1.45 !important;
+    max-width: 100% !important;
+  }
+  .settings-section-actions,
+  .settings-section-head > div[style*="margin-left:auto"] {
+    margin-left: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin-top: 4px !important;
+  }
+  .settings-section-actions .btn,
+  .settings-section-head > div[style*="margin-left:auto"] .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 8px 12px !important;
+    font-size: 0.82rem !important;
   }
 }
 
@@ -3800,6 +3957,8 @@ input[type="range"]::-moz-range-thumb {
   align-items: center;
   gap: 8px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
   padding: 4px 2px 14px 2px;
   border-bottom: 1px solid var(--glass-border-subtle);
   scrollbar-width: none;
@@ -3848,8 +4007,9 @@ input[type="range"]::-moz-range-thumb {
 
 .settings-nav-tabs.fk-seg {
   position: relative;
-  touch-action: pan-y;
+  touch-action: pan-x pan-y;
   user-select: none;
+  -webkit-overflow-scrolling: touch;
 }
 .settings-nav-tabs.fk-seg .fk-pill {
   position: absolute;
