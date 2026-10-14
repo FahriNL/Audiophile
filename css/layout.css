@@ -1232,6 +1232,13 @@
   border-radius: 0 !important;
 }
 
+@media (max-width: 767px) {
+  .full-player.mode-fullscreen.active {
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 12px calc(16px + env(safe-area-inset-bottom, 0px)) 12px !important;
+  }
+}
+
+
 #fpArtWrapper,
 #fsCoverWrapper,
 #fsCoverBox {

@@ -2,7 +2,7 @@
  * Audiophile Service Worker
  * Caches app shell assets for offline standalone PWA capability.
  */
-const CACHE_NAME = 'audiophile-shell-v16';
+const CACHE_NAME = 'audiophile-shell-v18';
 const APP_SHELL = [
   './',
   './index.html',

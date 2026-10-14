@@ -1,6 +1,6 @@
 {
   "name": "hifilocal",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Pemutar musik lokal audiophile modular dengan verifikasi keaslian Hi-Res dan signal path jujur",
   "type": "module",
   "main": "server.js",

@@ -696,8 +696,30 @@ class Application {
   static registerServiceWorker() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(err => {
-          console.warn('SW register notice:', err);
+        navigator.serviceWorker.register('./sw.js?v=1.0.2', { updateViaCache: 'none' })
+          .then((reg) => {
+            reg.update().catch(() => {});
+            reg.addEventListener('updatefound', () => {
+              const installingWorker = reg.installing;
+              if (installingWorker) {
+                installingWorker.addEventListener('statechange', () => {
+                  if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    console.log('New Audiophile update installed, activating...');
+                  }
+                });
+              }
+            });
+          })
+          .catch(err => {
+            console.warn('SW register notice:', err);
+          });
+
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+          }
         });
       });
     }
